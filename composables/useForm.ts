@@ -1,19 +1,19 @@
 import {
   loginFormSchema,
   formSchema,
-  forgotPasswordSchema,
+  forgotPasswordSchema
 } from '../utils/schemas'
 import type {
   SignUpErrors,
   LoginErrors,
-  ForgotPasswordErrors,
+  ForgotPasswordErrors
 } from '../utils/schemas'
 import { fromZodError } from 'zod-validation-error'
 
 export const useForm = () => {
   const loginForm = reactive({
     email: '',
-    password: '',
+    password: ''
   })
 
   const loginErrors = ref<LoginErrors | null>(null)
@@ -32,7 +32,7 @@ export const useForm = () => {
   }
 
   const forgotPasswordForm = reactive({
-    email: '',
+    email: ''
   })
 
   const forgotPasswordErrors = ref<ForgotPasswordErrors | null>(null)
@@ -56,7 +56,7 @@ export const useForm = () => {
     email: '',
     password: '',
     passwordConfirmation: '',
-    marketingAccept: false,
+    marketingAccept: false
   })
 
   const signUpErrors = ref<SignUpErrors | null>(null)
@@ -83,6 +83,6 @@ export const useForm = () => {
     onLogin,
     forgotPasswordErrors,
     forgotPasswordForm,
-    onForgotPassword,
+    onForgotPassword
   }
 }
