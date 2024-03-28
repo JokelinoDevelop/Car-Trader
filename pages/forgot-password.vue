@@ -1,6 +1,11 @@
 <template>
-  <div class="mx-auto bg-pink px-4 py-44 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-lg">
+  <div class="mx-auto bg-pink px-4 py-44 sm:px-6 lg:px-8 relative">
+    <NuxtImg src="/images/audi-q3-car.png"
+      class="absolute w-[15rem] left-[50%] -translate-x-[50%] bottom-0 lg:w-[25rem] lg:left-0 lg:translate-x-[0] xl:w-[30rem] xl:left-[3rem] xl:top-[50%] xl:-translate-y-[50%]"
+      alt="audi q3" />
+    <NuxtImg src="/images/mercedes-ml-car.webp"
+      class="absolute w-[15rem] right-[50%] translate-x-[50%] top-0 lg:w-[25rem] lg:right-0 lg:translate-x-[0] xl:w-[30rem] xl:right-[3rem]  xl:top-[50%] xl:-translate-y-[50%]" />
+    <div class="mx-auto max-w-lg relative">
       <h1 class="text-center text-3xl font-bold text-white sm:text-3xl">
         Forgot password
       </h1>
@@ -38,10 +43,8 @@ const { forgotPasswordErrors, forgotPasswordForm, onForgotPassword } = useForm()
 
 const auth = useFirebaseAuth()
 
-const loading = ref(false)
-
 const onLoginFormSubmit = async () => {
-  loading.value = true
+  const notification = push.promise('We are sending you instructions for resetting your password...')
   try {
     const success = onForgotPassword()
 
@@ -50,11 +53,11 @@ const onLoginFormSubmit = async () => {
     }
 
     await sendPasswordResetEmail(auth!, forgotPasswordForm.email, { url: 'http://localhost:3000' })
+    notification.resolve('Successfully sent instructions for resetting your password!')
     return await navigateTo('/login', { replace: true })
   } catch (e) {
-    console.log(e)
-  } finally {
-    loading.value = false
+    console.error(e)
+    notification.reject('Failed to send instructions for resetting your password, please try again later!')
   }
 }
 

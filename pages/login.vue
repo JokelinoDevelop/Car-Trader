@@ -42,10 +42,6 @@
                 </p>
               </NuxtLink>
 
-              <div v-if="loading">
-                <p>Loading...</p>
-              </div>
-
               <button type="submit"
                 class="block w-full rounded-lg bg-lightGreen hover:bg-brown border-4 border-white hover:text-white px-5 py-3 text-lg tracking-widest font-[500] text-black transition-all duration-300">
                 Sign in
@@ -84,10 +80,8 @@ const { loginErrors, loginForm, onLogin } = useForm()
 
 const auth = useFirebaseAuth()
 
-const loading = ref(false)
-
 const onLoginFormSubmit = async () => {
-  loading.value = true
+  const notification = push.promise('We are logging your account in...')
   try {
     const success = onLogin()
 
@@ -96,25 +90,30 @@ const onLoginFormSubmit = async () => {
     }
 
     await signInWithEmailAndPassword(auth!, loginForm.email, loginForm.password)
+    notification.resolve('Successfully logged in!')
 
     return await navigateTo('/profile', { replace: true })
   } catch (e) {
-    console.log(e)
-  } finally {
-    loading.value = false
+    console.error(e)
+    notification.reject(
+      'Failed to log in, please check your credentials and try again'
+    )
   }
 }
 
 const onGoogleFormSubmit = async () => {
-  loading.value = true
+  const notification = push.promise('We are logging your account in...')
   try {
     await signInWithPopup(auth!, googleAuthProvider)
 
+    notification.resolve('Successfully logged in!')
+
     return await navigateTo('/profile', { replace: true })
   } catch (e) {
-    console.log(e)
-  } finally {
-    loading.value = false
+    console.error(e)
+    notification.reject(
+      'Failed to log in, please check your credentials and try again'
+    )
   }
 }
 </script>

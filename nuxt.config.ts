@@ -1,8 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['radix-vue/nuxt', 'nuxt-icon', '@nuxt/image', 'nuxt-vuefire'],
-  css: ['~/assets/css/main.css'],
+  modules: [
+    'radix-vue/nuxt',
+    'nuxt-icon',
+    '@nuxt/image',
+    'nuxt-vuefire',
+    'notivue/nuxt'
+  ],
+  css: [
+    '~/assets/css/main.css',
+    'notivue/notifications.css',
+    'notivue/animations.css'
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -19,6 +29,16 @@ export default defineNuxtConfig({
       messagingSenderId: process.env.messagingSenderId,
       appId: process.env.appId,
       measurementId: process.env.measurementId
+    }
+  },
+  notivue: {
+    position: 'top-right',
+    limit: 4,
+    enqueue: true,
+    notifications: {
+      global: {
+        duration: 5000
+      }
     }
   }
 })
