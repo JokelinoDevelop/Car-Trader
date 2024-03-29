@@ -41,6 +41,10 @@
 import { sendPasswordResetEmail } from 'firebase/auth'
 const { forgotPasswordErrors, forgotPasswordForm, onForgotPassword } = useForm()
 
+definePageMeta({
+  middleware: 'already-logged-in'
+})
+
 const auth = useFirebaseAuth()
 
 const onLoginFormSubmit = async () => {

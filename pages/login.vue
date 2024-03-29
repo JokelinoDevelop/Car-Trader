@@ -48,7 +48,8 @@
               </button>
             </form>
 
-            <hr class="mt-6 border-2 border-brown rounded-2xl">
+            <Divider />
+            <!-- <hr class="mt-6 border-2 border-brown rounded-2xl"> -->
 
             <div class="w-full flex justify-center mt-6">
               <ButtonGoogle @click="onGoogleFormSubmit">
@@ -75,8 +76,13 @@ export const googleAuthProvider = new GoogleAuthProvider()
 </script>
 
 <script setup lang="ts">
+import type { FirebaseError } from 'firebase-admin'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 const { loginErrors, loginForm, onLogin } = useForm()
+
+definePageMeta({
+  middleware: 'already-logged-in'
+})
 
 const auth = useFirebaseAuth()
 
@@ -93,11 +99,25 @@ const onLoginFormSubmit = async () => {
     notification.resolve('Successfully logged in!')
 
     return await navigateTo('/profile', { replace: true })
-  } catch (e) {
-    console.error(e)
-    notification.reject(
-      'Failed to log in, please check your credentials and try again'
-    )
+  } catch (e: any) {
+    const errorCode = (e as FirebaseError).code
+    switch (errorCode) {
+      case 'auth/invalid-email':
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        notification.reject('Invalid email or password')
+        break
+      case 'auth/user-disabled':
+        notification.reject('User disabled, please contact support')
+        break
+      case 'auth/too-many-requests':
+        notification.reject('Too many requests, please try again later')
+        break
+      default:
+        notification.reject(
+          'Failed to log in, please check your credentials and try again'
+        )
+    }
   }
 }
 

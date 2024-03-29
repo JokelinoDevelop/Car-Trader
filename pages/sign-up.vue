@@ -86,7 +86,8 @@
             </div>
           </form>
 
-          <hr class="mt-6 border-2 border-brown rounded-2xl">
+          <!-- <hr class="mt-6 border-2 border-brown rounded-2xl"> -->
+          <Divider class="mt-6" />
 
           <div class="w-full flex justify-center mt-6">
             <ButtonGoogle @click="onGoogleFormSubmit">
@@ -105,12 +106,17 @@ export const googleAuthProvider = new GoogleAuthProvider()
 </script>
 
 <script setup lang="ts">
+import type { FirebaseError } from 'firebase-admin'
 import {
   createUserWithEmailAndPassword,
   updateProfile,
   signInWithPopup,
 } from 'firebase/auth'
 const { form, signUpErrors, onSubmit } = useForm()
+
+definePageMeta({
+  middleware: 'already-logged-in'
+})
 
 const auth = useFirebaseAuth()
 
@@ -136,11 +142,19 @@ const onFormSubmit = async () => {
 
     console.log(user)
     return await navigateTo('/profile')
-  } catch (e) {
-    console.error(e)
-    notification.reject(
-      'Failed to create account, please check your credentials and try again'
-    )
+  } catch (e: any) {
+    const errorCode = (e as FirebaseError).code
+    console.log(errorCode)
+    switch (errorCode) {
+      case 'auth/email-already-in-use':
+        notification.reject('Email already in use. Please try again with a different email address.')
+        break
+      case 'auth/weak-password':
+        notification.reject('Password is not strong enough. Add more characters including special characters and numbers.')
+        break
+      default:
+        notification.reject('Failed to create account, please check your credentials and try again')
+    }
   }
 }
 

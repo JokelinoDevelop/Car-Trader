@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     enqueue: true,
     notifications: {
       global: {
-        duration: 5000
+        duration: 10000
       }
     }
   }
