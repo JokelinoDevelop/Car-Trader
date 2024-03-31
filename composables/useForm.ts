@@ -1,12 +1,12 @@
 import {
   loginFormSchema,
   formSchema,
-  forgotPasswordSchema
+  forgotPasswordSchema,
 } from '../utils/schemas'
 import type {
   SignUpErrors,
   LoginErrors,
-  ForgotPasswordErrors
+  ForgotPasswordErrors,
 } from '../utils/schemas'
 import { fromZodError } from 'zod-validation-error'
 

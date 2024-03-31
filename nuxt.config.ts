@@ -33,8 +33,7 @@ export default defineNuxtConfig({
   },
   notivue: {
     position: 'top-right',
-    limit: 4,
-    enqueue: true,
+    limit: 1,
     notifications: {
       global: {
         duration: 10000

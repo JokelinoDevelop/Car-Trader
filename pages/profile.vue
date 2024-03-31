@@ -8,16 +8,18 @@
           {{ user?.displayName }}
         </p>
 
-        <EditProfile />
-        <button type="button"
-          class="font-semibold hover:bg-pink inline-flex h-[35px] items-center justify-center rounded-[4px] bg-brown px-[15px] leading-none focus:outline-none transition-all duration-200"
-          @click="onLogout">
-          Logout
-        </button>
+        <EditProfile :user="user" />
+        <LogoutProfile />
       </div>
       <div class="text-2xl">
-        <Icon name="mdi:car" size="38" /> <span>Car Ads Posted: 5</span>
+        <Icon name="mdi:car" size="38" class="text-lightPink mr-1" /> <span>Car Ads Posted: 5</span>
       </div>
+    </div>
+
+    <hr class="border-2 border-brown rounded-xl">
+
+    <div class="grid grid-cols-3 gap-8 mt-12 pb-12">
+      <Post />
     </div>
   </div>
 </template>
@@ -26,14 +28,8 @@
 definePageMeta({
   middleware: 'auth',
 })
-import { signOut } from 'firebase/auth'
+
 const user = useCurrentUser()
 
-const auth = useFirebaseAuth()
-
-const onLogout = async () => {
-  await signOut(auth!)
-  await navigateTo('/', { replace: true })
-}
 
 </script>

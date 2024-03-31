@@ -2,7 +2,7 @@ import * as z from 'zod'
 
 export const loginFormSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(5),
+  password: z.string().min(5)
 })
 export type LoginFormSchema = z.infer<typeof loginFormSchema>
 
@@ -26,13 +26,13 @@ export const formSchema = z
       .string()
       .min(5, { message: 'Needs to be at least 5 characters' }),
     marketingAccept: z.boolean().refine((value) => value === true, {
-      message: 'Please check the field',
-    }),
+      message: 'Please check the field'
+    })
   })
   .refine((data) => data.password === data.passwordConfirmation, {
     // eslint-disable-next-line quotes
     message: "Passwords don't match",
-    path: ['passwordConfirmation'],
+    path: ['passwordConfirmation']
   })
 
 export type FormSchema = z.infer<typeof formSchema>
@@ -40,7 +40,7 @@ export type FormSchema = z.infer<typeof formSchema>
 export type SignUpErrors = z.ZodFormattedError<FormSchema>
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email()
 })
 
 export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>

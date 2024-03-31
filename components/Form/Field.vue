@@ -24,7 +24,7 @@ const { errors } = defineProps<{
   label: string,
   placeholder: string,
   type?: string
-  errors?: any
+  errors?: any,
 }>()
 
 const modelValue = defineModel<any>()
