@@ -13,7 +13,9 @@
 
 
       <div class="flex items-center gap-2 md:gap-6 text-md md:text-lg">
-        <span class="hover-pink">All Cars</span>
+        <NuxtLink to="/vehicles" class="hover-pink">
+          Vehicles
+        </NuxtLink>
         <span class="hover-pink">Sellers</span>
         <!-- <Icon name="mdi:account-outline" size="32" color="#DDCAD9" class="cursor-pointer" /> -->
         <DropDownMenu />

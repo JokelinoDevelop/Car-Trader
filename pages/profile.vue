@@ -11,8 +11,9 @@
         <EditProfile :user="user" />
         <LogoutProfile />
       </div>
-      <div class="text-2xl">
-        <Icon name="mdi:car" size="38" class="text-lightPink mr-1" /> <span>Car Ads Posted: 5</span>
+      <div class=" flex items-center justify-center gap-4">
+        <PostCreate />
+        <Icon name="mdi:car" size="38" class="text-lightPink" /> <span class="text-2xl">Car Ads Posted: 5</span>
       </div>
     </div>
 

@@ -2,7 +2,7 @@
   <NuxtLink to="/post-info"
     class="block rounded-lg p-4 bg-brown hover:bg-brown/80 border-2 border-lightPink text-white transition-all duration-300">
     <NuxtImg alt="Car image" src="/images/car.jpg"
-      class="h-[21rem] w-full rounded-md object-cover border-2 border-lightPink" />
+      class="h-[20rem] w-full rounded-md object-cover border-2 border-lightPink" />
 
     <div class="mt-4">
       <dl>
@@ -27,47 +27,17 @@
         </div>
       </dl>
 
-      <div class="mt-6 flex items-center gap-8 text-md">
-        <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
-          <Icon name="mdi:engine" size="32" class="text-pink" />
-
-          <div class="ml-2 mt-1.5 sm:mt-0">
-            <p class="text-gray-500">
-              Engine
-            </p>
-
-            <p class="font-medium">
-              2.0l
-            </p>
-          </div>
+      <div class="mt-6 flex flex-col items-center text-md">
+        <div class="flex justify-around w-full">
+          <PostCardInfo icon="mdi:calendar" title="Year" value="2020" />
+          <PostCardInfo icon="mdi:engine" title="Engine" value="2.0l" />
+          <PostCardInfo icon="mdi:car-hatchback" title="Brand" value="Fiat" />
         </div>
 
-        <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
-          <Icon name="mdi:fuel" size="32" class="text-pink" />
-
-          <div class="ml-2 mt-1.5 sm:mt-0">
-            <p class="text-gray-500">
-              Fuel
-            </p>
-
-            <p class="font-medium ">
-              Petrol
-            </p>
-          </div>
-        </div>
-
-        <div class="sm:inline-flex sm:shrink-0 sm:items-center sm:gap-2">
-          <Icon name="mdi:car-door" size="32" class="text-pink" />
-
-          <div class="ml-2 mt-1.5 sm:mt-0">
-            <p class="text-gray-500">
-              Doors
-            </p>
-
-            <p class="font-medium">
-              5
-            </p>
-          </div>
+        <div class="flex justify-around w-full">
+          <PostCardInfo icon="mdi:fuel" title="Fuel" value="Petrol" />
+          <PostCardInfo icon="material-symbols:auto-transmission-outline" title="Gearbox" value="Manual" />
+          <PostCardInfo icon="mdi:car-door" title="Doors" value="5" />
         </div>
       </div>
     </div>

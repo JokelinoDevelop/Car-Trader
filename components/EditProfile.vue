@@ -15,8 +15,7 @@
           Make changes to your profile here. Click save when you're done.
         </DialogDescription>
         <fieldset class="mb-[15px]">
-          <FormField v-model="name" label="name" placeholder="name" class="w-full mt-2 text-black"
-            error-style="text-lightGreen" />
+          <FormField v-model="name" label="name" placeholder="name" class="w-full mt-2 text-black" />
         </fieldset>
         <p v-if="error" class="text-red-100 text-sm font-[500] tracking-wider">
           - {{ error }}!

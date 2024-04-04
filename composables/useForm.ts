@@ -2,16 +2,18 @@ import {
   loginFormSchema,
   formSchema,
   forgotPasswordSchema,
+  createAdFormSchema
 } from '../utils/schemas'
 import type {
   SignUpErrors,
   LoginErrors,
   ForgotPasswordErrors,
+  CreateAdErrors
 } from '../utils/schemas'
 import { fromZodError } from 'zod-validation-error'
 
 export const useForm = () => {
-  const loginForm = reactive({
+  const loginForm = reactive<LoginFormSchema>({
     email: '',
     password: ''
   })
@@ -31,7 +33,7 @@ export const useForm = () => {
     }
   }
 
-  const forgotPasswordForm = reactive({
+  const forgotPasswordForm = reactive<ForgotPasswordSchema>({
     email: ''
   })
 
@@ -50,7 +52,7 @@ export const useForm = () => {
     }
   }
 
-  const form = reactive({
+  const form = reactive<FormSchema>({
     firstName: '',
     lastName: '',
     email: '',
@@ -74,6 +76,34 @@ export const useForm = () => {
     }
   }
 
+  const createAdForm = reactive<CreateAdFormSchema>({
+    postTitle: '',
+    description: '',
+    brand: '',
+    model: '',
+    engine: '',
+    fuelType: '',
+    transmission: '',
+    numberOfDoors: null,
+    year: null,
+    price: null
+  })
+
+  const createAdErrors = ref<CreateAdErrors | null>(null)
+
+  const onCreateAd = () => {
+    const valid = createAdFormSchema.safeParse(createAdForm)
+    if (!valid.success) {
+      createAdErrors.value = valid.error.format()
+      const errorConsole = fromZodError(valid.error)
+      console.error(errorConsole)
+      return false
+    } else {
+      createAdErrors.value = null
+      return true
+    }
+  }
+
   return {
     signUpErrors,
     form,
@@ -83,6 +113,9 @@ export const useForm = () => {
     onLogin,
     forgotPasswordErrors,
     forgotPasswordForm,
-    onForgotPassword
+    onForgotPassword,
+    createAdErrors,
+    createAdForm,
+    onCreateAd
   }
 }
