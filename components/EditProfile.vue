@@ -14,19 +14,23 @@
         <DialogDescription class="mt-[10px] mb-5 text-md leading-normal">
           Make changes to your profile here. Click save when you're done.
         </DialogDescription>
-        <fieldset class="mb-[15px]">
-          <FormField v-model="name" label="name" placeholder="name" class="w-full mt-2 text-black" />
-        </fieldset>
-        <p v-if="error" class="text-red-100 text-sm font-[500] tracking-wider">
-          - {{ error }}!
-        </p>
-        <div class="mt-[25px] flex justify-end">
-          <button
-            class="hover:bg-pink hover:text-white bg-white text-brown inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
-            @click="updateUserProfile">
-            Save changes
-          </button>
-        </div>
+        <form class="mb-[15px]" @submit.prevent="onEditProfileSubmit">
+          <fieldset :disabled="uploading">
+            <FormField v-model="editProfileForm.firstName" label="First Name" placeholder="First Name"
+              :errors="editProfileErrors?.firstName" class="w-full mt-2 text-black" :dark="true" />
+            <FormField v-model="editProfileForm.lastName" label="Last Name" placeholder="Last Name"
+              :errors="editProfileErrors?.lastName" class="w-full mt-2 text-black" :dark="true" />
+            <FormField v-model="editProfileForm.phoneNumber" label="Phone Number" placeholder="Phone Number"
+              :errors="editProfileErrors?.phoneNumber" class="w-full mt-2 text-black" type="tel" :dark="true" />
+            <div class="mt-[25px] flex justify-end">
+              <button
+                class="hover:bg-pink hover:text-white bg-white text-brown inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
+                type="submit">
+                Save changes
+              </button>
+            </div>
+          </fieldset>
+        </form>
         <DialogClose
           class="text-grass11 hover:bg-green4 focus:shadow-green7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
           aria-label="Close">
@@ -38,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import { doc, updateDoc } from 'firebase/firestore'
 import { updateProfile } from 'firebase/auth'
 import {
   DialogClose,
@@ -51,39 +56,50 @@ import {
 } from 'radix-vue'
 import { Icon } from '@iconify/vue'
 
+const { editProfileForm, onEditProfile, editProfileErrors } = useForm()
+
 const open = ref(false)
 
 const user = useCurrentUser()
 
 const name = ref(user.value?.displayName ?? '')
 
-const error = ref('')
+const uploading = ref(false)
 
-const updateUserProfile = async () => {
+const db = useFirestore()
+
+const onEditProfileSubmit = async () => {
+  uploading.value = true
   const notification = push.promise('We are updating your profile...')
   try {
     if (!user.value) return
 
-    if (name.value.length < 3 || name.value.length > 20) {
-      error.value = 'Name must be between 3 and 20 characters'
-      notification.reject('Name must be between 3 and 20 characters')
-      return
-    }
-
-    if (name.value === user.value?.displayName) {
-      error.value = 'Name must be different from current name'
-      notification.reject('Name must be different from current name')
-      return
+    if (onEditProfile() == false) {
+      notification.reject('Failed to update your profile, please check form data and try again!')
+      throw new Error('Failed to update user profile')
     }
 
     await updateProfile(user.value!, {
       displayName: name.value,
     })
+
+    const usersRef = doc(db, 'users', user.value.uid)
+
+    await updateDoc(usersRef, {
+      firstName: editProfileForm.firstName,
+      lastName: editProfileForm.lastName,
+      phoneNumber: editProfileForm.phoneNumber,
+      updatedAt: new Date().toISOString(),
+    })
+
+
     open.value = false
     notification.resolve('Successfully updated profile!')
   } catch (e: any) {
     console.error('Failed to update user profile', e)
     notification.reject('Failed to update profile, please try again later!')
+  } finally {
+    uploading.value = false
   }
 }
 

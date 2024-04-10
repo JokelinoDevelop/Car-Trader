@@ -26,26 +26,27 @@
 
           <div
             class="bg-lightPink border-2 border-white lg:w-[35rem] my-6 space-y-6 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
-            <form class="space-y-6" @submit.prevent="onLoginFormSubmit">
-              <p class="text-center text-xl tracking-wider text-white font-[500]">
-                Sign in to your account
-              </p>
-
-              <FormField v-model="loginForm.email" label="Email" placeholder="Email" class="col-span-6 sm:col-span-6"
-                type="email" :errors="loginErrors?.email" />
-              <FormField v-model="loginForm.password" label="Password" placeholder="Password" type="password"
-                :errors="loginErrors?.password" />
-
-              <NuxtLink to="/forgot-password">
-                <p class="mt-2 underline hover:text-blue-500 transition-all duration-300">
-                  Forgot your password?
+            <form @submit.prevent="onLoginFormSubmit">
+              <fieldset :disabled="uploading" class="space-y-6">
+                <p class="text-center text-xl tracking-wider text-white font-[500]">
+                  Sign in to your account
                 </p>
-              </NuxtLink>
+                <FormField v-model="loginForm.email" label="Email" placeholder="Email" class="col-span-6 sm:col-span-6"
+                  type="email" :errors="loginErrors?.email" />
+                <FormField v-model="loginForm.password" label="Password" placeholder="Password" type="password"
+                  :errors="loginErrors?.password" />
 
-              <button type="submit"
-                class="block w-full rounded-lg bg-lightGreen hover:bg-brown border-4 border-white hover:text-white px-5 py-3 text-lg tracking-widest font-[500] text-black transition-all duration-300">
-                Sign in
-              </button>
+                <NuxtLink to="/forgot-password">
+                  <p class="mt-2 underline hover:text-blue-500 transition-all duration-300">
+                    Forgot your password?
+                  </p>
+                </NuxtLink>
+
+                <button type="submit"
+                  class="block w-full rounded-lg bg-lightGreen hover:bg-brown border-4 border-white hover:text-white px-5 py-3 text-lg tracking-widest font-[500] text-black transition-all duration-300">
+                  Sign in
+                </button>
+              </fieldset>
             </form>
 
             <Divider />
@@ -86,7 +87,10 @@ definePageMeta({
 
 const auth = useFirebaseAuth()
 
+const uploading = ref(false)
+
 const onLoginFormSubmit = async () => {
+  uploading.value = true
   const notification = push.promise('We are logging your account in...')
   try {
     const success = onLogin()
@@ -118,10 +122,13 @@ const onLoginFormSubmit = async () => {
           'Failed to log in, please check your credentials and try again'
         )
     }
+  } finally {
+    uploading.value = false
   }
 }
 
 const onGoogleFormSubmit = async () => {
+  uploading.value = true
   const notification = push.promise('We are logging your account in...')
   try {
     await signInWithPopup(auth!, googleAuthProvider)
@@ -134,6 +141,8 @@ const onGoogleFormSubmit = async () => {
     notification.reject(
       'Failed to log in, please check your credentials and try again'
     )
+  } finally {
+    uploading.value = false
   }
 }
 </script>

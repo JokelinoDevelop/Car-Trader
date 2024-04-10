@@ -1,5 +1,5 @@
 <template>
-  <DialogRoot>
+  <DialogRoot v-model:open="open">
     <DialogTrigger
       class="font-semibold hover:bg-pink inline-flex h-[35px] items-center justify-center rounded-[4px] bg-brown px-[15px] leading-none focus:outline-none transition-all duration-200">
       Create Ad
@@ -15,7 +15,7 @@
           Enter the information about your ad here.
         </DialogDescription>
         <form @submit.prevent="onCreateAdFormSubmit">
-          <fieldset class="mb-[15px] text-black grid grid-cols-6 gap-4">
+          <fieldset :disabled="uploading" class="mb-[15px] text-black grid grid-cols-6 gap-4">
             <FormField v-model="createAdForm.postTitle" label="postTitle" placeholder="Post Title"
               :errors="createAdErrors?.postTitle" :dark="true" class="sm:col-span-6" />
             <FormField v-model="createAdForm.brand" label="brand" placeholder="Brand" :errors="createAdErrors?.brand"
@@ -71,6 +71,7 @@ import {
 } from 'radix-vue'
 import { Icon } from '@iconify/vue'
 import type { FirebaseError } from 'firebase-admin'
+import { collection, doc, setDoc } from 'firebase/firestore'
 
 const fuelTypes = Object.values(FuelType)
 const transmissions = Object.values(Transmission)
@@ -83,24 +84,41 @@ const years = Array.from(
   (_, index) => startYear + index
 )
 
+const open = ref(false)
+
+const user = useCurrentUser()
+
+const db = useFirestore()
 
 const { createAdForm, createAdErrors, onCreateAd } = useForm()
 
-const onCreateAdFormSubmit = () => {
+const uploading = ref(false)
+
+const onCreateAdFormSubmit = async () => {
+  uploading.value = true
   const notification = push.promise('We are creating your ad...')
   try {
-
     if (onCreateAd() == false) {
       notification.reject('Failed to create ad, please check form data and try again!')
       return
     }
-    console.log(createAdForm)
+    const postRef = doc(collection(db, 'posts'))
+    await setDoc(postRef, {
+      ...createAdForm,
+      userId: user.value?.uid,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    })  
 
+    open.value = false
     notification.resolve('Successfully created ad!')
   } catch (e: any) {
     const errorCode = (e as FirebaseError).code
     console.error(errorCode)
     notification.reject('Failed to create ad, please try again later!')
+  } finally {
+    uploading.value = false
   }
 }
+
 </script>

@@ -13,24 +13,39 @@
       </div>
       <div class=" flex items-center justify-center gap-4">
         <PostCreate />
-        <Icon name="mdi:car" size="38" class="text-lightPink" /> <span class="text-2xl">Car Ads Posted: 5</span>
+        <Icon name="mdi:car" size="38" class="text-lightPink" /> <span class="text-2xl">Car Ads Posted: {{ posts?.length
+            ?? '0' }}</span>
       </div>
     </div>
 
     <hr class="border-2 border-brown rounded-xl">
 
     <div class="grid grid-cols-3 gap-8 mt-12 pb-12">
-      <Post />
+      <template v-for="post in posts" :key="post.id">
+        <Post :post="post" />
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { Post } from '~/types'
+import { collection, query, where } from 'firebase/firestore'
+
 definePageMeta({
   middleware: 'auth',
 })
 
 const user = useCurrentUser()
+
+const db = useFirestore()
+
+const q = query(collection(db, 'posts'), where('userId', '==', user.value?.uid))
+
+const { data: posts } = useCollection<Post>(q, { ssrKey: useId() })
+
+
+
 
 
 </script>

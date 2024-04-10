@@ -8,6 +8,8 @@ export type LoginFormSchema = z.infer<typeof loginFormSchema>
 
 export type LoginErrors = z.ZodFormattedError<LoginFormSchema>
 
+const phoneRegex = /^07[0-9]{7}$/
+
 export const formSchema = z
   .object({
     firstName: z
@@ -25,6 +27,10 @@ export const formSchema = z
     passwordConfirmation: z
       .string()
       .min(5, { message: 'Needs to be at least 5 characters' }),
+    phoneNumber: z.string().refine((value) => phoneRegex.test(value), {
+      message:
+        'Invalid phone number format. Phone number must start with 07 followed by 7 digits without spaces.'
+    }),
     marketingAccept: z.boolean().refine((value) => value === true, {
       message: 'Please check the field'
     })
@@ -85,3 +91,21 @@ export const createAdFormSchema = z.object({
 export type CreateAdFormSchema = z.infer<typeof createAdFormSchema>
 
 export type CreateAdErrors = z.ZodFormattedError<CreateAdFormSchema>
+
+export const editProfileFormSchema = z.object({
+  firstName: z
+    .string()
+    .min(3, { message: 'Needs to be at least 3 characters' })
+    .max(50),
+  lastName: z
+    .string()
+    .min(3, { message: 'Needs to be at least 3 characters' })
+    .max(50),
+  phoneNumber: z.string().refine((value) => phoneRegex.test(value), {
+    message:
+      'Invalid phone number format. Phone number must start with 07 followed by 7 digits without spaces.'
+  })
+})
+export type EditProfileFormSchema = z.infer<typeof editProfileFormSchema>
+
+export type EditProfileErrors = z.ZodFormattedError<EditProfileFormSchema>

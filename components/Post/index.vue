@@ -12,7 +12,7 @@
           </dt>
 
           <dd class="text-2xl text-gray-500">
-            $240,000
+            ${{ post.price }}
           </dd>
         </div>
 
@@ -22,22 +22,22 @@
           </dt>
 
           <dd class="font-medium text-xl text-lightGreen tracking-widest">
-            Fiat Grande Punto
+            {{ post.postTitle }}
           </dd>
         </div>
       </dl>
 
       <div class="mt-6 flex flex-col items-center text-md">
         <div class="flex justify-around w-full">
-          <PostCardInfo icon="mdi:calendar" title="Year" value="2020" />
-          <PostCardInfo icon="mdi:engine" title="Engine" value="2.0l" />
-          <PostCardInfo icon="mdi:car-hatchback" title="Brand" value="Fiat" />
+          <PostCardInfo icon="mdi:calendar" title="Year" :value="post.year" />
+          <PostCardInfo icon="mdi:engine" title="Engine" :value="post.engine" />
+          <PostCardInfo icon="mdi:car-hatchback" title="Brand" :value="post.brand" />
         </div>
 
         <div class="flex justify-around w-full">
-          <PostCardInfo icon="mdi:fuel" title="Fuel" value="Petrol" />
-          <PostCardInfo icon="material-symbols:auto-transmission-outline" title="Gearbox" value="Manual" />
-          <PostCardInfo icon="mdi:car-door" title="Doors" value="5" />
+          <PostCardInfo icon="mdi:fuel" title="Fuel" :value="post.fuelType" />
+          <PostCardInfo icon="material-symbols:auto-transmission-outline" title="Gearbox" :value="post.transmission" />
+          <PostCardInfo icon="mdi:car-door" title="Doors" :value="post.numberOfDoors" />
         </div>
       </div>
     </div>
@@ -45,5 +45,8 @@
 </template>
 
 <script setup lang="ts">
-
+import type { Post } from '~/types'
+defineProps<{
+  post: Post
+}>()
 </script>

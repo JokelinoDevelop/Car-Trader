@@ -27,10 +27,10 @@
 <script setup lang="ts">
 const { errors, dark, icon } = defineProps<{
   label: string,
-  placeholder: string,
+  placeholder: string
   icon?: string
   type?: string
-  errors?: any,
+  errors?: any
   dark?: boolean
 }>()
 

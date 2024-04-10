@@ -2,13 +2,15 @@ import {
   loginFormSchema,
   formSchema,
   forgotPasswordSchema,
-  createAdFormSchema
+  createAdFormSchema,
+  editProfileFormSchema
 } from '../utils/schemas'
 import type {
   SignUpErrors,
   LoginErrors,
   ForgotPasswordErrors,
-  CreateAdErrors
+  CreateAdErrors,
+  EditProfileErrors
 } from '../utils/schemas'
 import { fromZodError } from 'zod-validation-error'
 
@@ -58,6 +60,7 @@ export const useForm = () => {
     email: '',
     password: '',
     passwordConfirmation: '',
+    phoneNumber: '',
     marketingAccept: false
   })
 
@@ -104,6 +107,27 @@ export const useForm = () => {
     }
   }
 
+  const editProfileForm = reactive<EditProfileFormSchema>({
+    firstName: '',
+    lastName: '',
+    phoneNumber: ''
+  })
+
+  const editProfileErrors = ref<EditProfileErrors | null>(null)
+
+  const onEditProfile = () => {
+    const valid = editProfileFormSchema.safeParse(editProfileForm)
+    if (!valid.success) {
+      editProfileErrors.value = valid.error.format()
+      const errorConsole = fromZodError(valid.error)
+      console.error(errorConsole)
+      return false
+    } else {
+      editProfileErrors.value = null
+      return true
+    }
+  }
+
   return {
     signUpErrors,
     form,
@@ -116,6 +140,9 @@ export const useForm = () => {
     onForgotPassword,
     createAdErrors,
     createAdForm,
-    onCreateAd
+    onCreateAd,
+    editProfileErrors,
+    editProfileForm,
+    onEditProfile
   }
 }

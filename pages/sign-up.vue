@@ -46,44 +46,48 @@
             </p>
           </div>
 
-          <form class="mt-8 grid grid-cols-6 gap-6 text-lg" @submit.prevent="onFormSubmit">
-            <FormField v-model="form.firstName" label="First Name" placeholder="First Name"
-              :errors="signUpErrors?.firstName" />
-            <FormField v-model="form.lastName" label="Last Name" placeholder="Last Name"
-              :errors="signUpErrors?.lastName" />
-            <FormField v-model="form.email" label="Email" placeholder="Email" class="col-span-6 sm:col-span-6"
-              type="email" :errors="signUpErrors?.email" />
-            <FormField v-model="form.password" label="Password" placeholder="Password" type="password"
-              :errors="signUpErrors?.password" />
-            <FormField v-model="form.passwordConfirmation" label="Password Confirmation"
-              placeholder="Password Confirmation" :errors="signUpErrors?.passwordConfirmation" type="password" />
+          <form @submit.prevent="onFormSubmit">
+            <fieldset :disabled="uploading" class="mt-8 grid grid-cols-6 gap-6 text-lg">
+              <FormField v-model="form.firstName" label="First Name" placeholder="First Name"
+                :errors="signUpErrors?.firstName" />
+              <FormField v-model="form.lastName" label="Last Name" placeholder="Last Name"
+                :errors="signUpErrors?.lastName" />
+              <FormField v-model="form.phoneNumber" label="Phone Number" placeholder="Phone Number"
+                :errors="signUpErrors?.phoneNumber" class="col-span-6 sm:col-span-6" type="tel" />
+              <FormField v-model="form.email" label="Email" placeholder="Email" class="col-span-6 sm:col-span-6"
+                type="email" :errors="signUpErrors?.email" />
+              <FormField v-model="form.password" label="Password" placeholder="Password" type="password"
+                :errors="signUpErrors?.password" />
+              <FormField v-model="form.passwordConfirmation" label="Password Confirmation"
+                placeholder="Password Confirmation" :errors="signUpErrors?.passwordConfirmation" type="password" />
 
-            <FormCheckbox v-model="form.marketingAccept" :errors="signUpErrors?.marketingAccept" />
+              <FormCheckbox v-model="form.marketingAccept" :errors="signUpErrors?.marketingAccept" />
 
-            <div class="col-span-6">
-              <p class="text-sm text-gray-500">
-                By creating an account, you agree to our
-                <a href="#" class="text-gray-700 underline">
-                  terms and conditions
-                </a>
-                and
-                <a href="#" class="text-gray-700 underline">privacy policy</a>.
-              </p>
-            </div>
+              <div class="col-span-6">
+                <p class="text-sm text-gray-500">
+                  By creating an account, you agree to our
+                  <a href="#" class="text-gray-700 underline">
+                    terms and conditions
+                  </a>
+                  and
+                  <a href="#" class="text-gray-700 underline">privacy policy</a>.
+                </p>
+              </div>
 
-            <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
-              <button type="submit"
-                class="mt-8 inline-block rounded border border-pink bg-pink px-12 py-3 text-md font-medium text-slate-800 hover:bg-brown hover:text-lightPink focus:outline-none active:text-lightPink transition-all duration-300">
-                Create An Account
-              </button>
+              <div class="col-span-6 sm:flex sm:items-center sm:gap-4">
+                <button type="submit"
+                  class="mt-8 inline-block rounded border border-pink bg-pink px-12 py-3 text-md font-medium text-slate-800 hover:bg-brown hover:text-lightPink focus:outline-none active:text-lightPink transition-all duration-300">
+                  Create An Account
+                </button>
 
-              <p class="mt-4 text-sm text-black tracking-widest font-[500] sm:mt-0">
-                Already have an account?
-                <NuxtLink to="/login" class="text-gray-700 underline hover:text-blue-500 transition-all duration-300">
-                  Log in
-                </NuxtLink>.
-              </p>
-            </div>
+                <p class="mt-4 text-sm text-black tracking-widest font-[500] sm:mt-0">
+                  Already have an account?
+                  <NuxtLink to="/login" class="text-gray-700 underline hover:text-blue-500 transition-all duration-300">
+                    Log in
+                  </NuxtLink>.
+                </p>
+              </div>
+            </fieldset>
           </form>
 
           <!-- <hr class="mt-6 border-2 border-brown rounded-2xl"> -->
@@ -112,6 +116,7 @@ import {
   updateProfile,
   signInWithPopup,
 } from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore'
 const { form, signUpErrors, onSubmit } = useForm()
 
 definePageMeta({
@@ -120,7 +125,12 @@ definePageMeta({
 
 const auth = useFirebaseAuth()
 
+const db = useFirestore()
+
+const uploading = ref(false)
+
 const onFormSubmit = async () => {
+  uploading.value = true
   const notification = push.promise('We are creating your account...')
   try {
     const success = onSubmit()
@@ -134,8 +144,25 @@ const onFormSubmit = async () => {
       form.email,
       form.password
     )
+
+    console.log(user)
+
     await updateProfile(user!, {
       displayName: `${form.firstName} ${form.lastName}`,
+    })
+
+
+    const usersRef = doc(db, 'users', user.uid)
+
+    await setDoc(usersRef, {
+      uid: user.uid,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      phoneNumber: form.phoneNumber,
+      email: form.email,
+      marketingAccept: form.marketingAccept,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     })
 
     notification.resolve('Successfully created account!')
@@ -155,10 +182,13 @@ const onFormSubmit = async () => {
       default:
         notification.reject('Failed to create account, please check your credentials and try again')
     }
+  } finally {
+    uploading.value = false
   }
 }
 
 const onGoogleFormSubmit = async () => {
+  uploading.value = true
   const notification = push.promise('We are creating your account...')
   try {
     await signInWithPopup(auth!, googleAuthProvider)
@@ -171,6 +201,8 @@ const onGoogleFormSubmit = async () => {
     notification.reject(
       'Failed to create account, please check your credentials and try again'
     )
+  } finally {
+    uploading.value = false
   }
 }
 </script>
