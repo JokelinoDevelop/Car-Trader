@@ -13,9 +13,8 @@ import type { Post } from '~/types'
 import { collection, query } from 'firebase/firestore'
 
 const db = useFirestore()
-const collectionName = 'posts'
 
-const q = query(collection(db, collectionName))
+const q = query(collection(db, 'posts'))
 
-const { data: posts, pending } = useCollection<Post>(q, { ssrKey: useId() })
+const { data: posts } = useCollection<Post>(q, { ssrKey: useId() })
 </script>

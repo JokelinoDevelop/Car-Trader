@@ -77,15 +77,15 @@ export const createAdFormSchema = z.object({
   transmission: z.string().min(1, { message: 'Transmission is required' }),
   fuelType: z.string().min(1, { message: 'Fuel type is required' }),
   numberOfDoors: z
-    .number()
-    .min(1, { message: 'Number of doors is required' })
-    .nullable(),
-  year: z
-    .number()
-    .min(1990, { message: 'Year is required' })
-    .max(new Date().getFullYear())
-    .nullable(),
-  price: z.number().min(1, { message: 'Price is required' }).nullable()
+    .number({ required_error: 'Number of doors is required' })
+    .min(1, { message: 'Number of doors is required' }),
+  year: z.number().min(1990).max(new Date().getFullYear()),
+  price: z
+    .number({ required_error: 'Price is required' })
+    .min(1)
+    .lte(1000000, { message: 'Price is too high' }),
+  photos: z.array(z.any()).optional(),
+  coverImageIndex: z.number().optional()
 })
 
 export type CreateAdFormSchema = z.infer<typeof createAdFormSchema>

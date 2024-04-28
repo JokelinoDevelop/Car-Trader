@@ -2,19 +2,19 @@
   <div class="min-h-screen max-w-[80%] mx-auto">
     <div class="flex justify-between items-center mt-8 mb-8 text-white">
       <div class="flex items-center gap-8">
-        <NuxtImg src="/images/profile-image.webp" class="w-[5rem] rounded-xl border-2 border-brown" format="webp"
-          alt="profile image" />
+        <NuxtImg :src="userDoc?.photoURL ?? '/images/profile - image.webp'"
+          class="w-[5rem] h-[5rem] rounded-xl border-2 border-brown" format="webp" alt="profile image" />
         <p class="text-4xl">
-          {{ user?.displayName }}
+          {{ userDoc?.firstName + ' ' + userDoc?.lastName }}
         </p>
 
-        <EditProfile :user="user" />
+        <EditProfile />
         <LogoutProfile />
       </div>
       <div class=" flex items-center justify-center gap-4">
         <PostCreate />
         <Icon name="mdi:car" size="38" class="text-lightPink" /> <span class="text-2xl">Car Ads Posted: {{ posts?.length
-            ?? '0' }}</span>
+          ?? '0' }}</span>
       </div>
     </div>
 
@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Post } from '~/types'
-import { collection, query, where } from 'firebase/firestore'
+import type { Post, User } from '~/types'
+import { collection, query, where, doc } from 'firebase/firestore'
 
 definePageMeta({
   middleware: 'auth',
@@ -42,10 +42,10 @@ const db = useFirestore()
 
 const q = query(collection(db, 'posts'), where('userId', '==', user.value?.uid))
 
+const userRef = doc(collection(db, 'users'), user.value?.uid)
+
+const { data: userDoc } = useDocument<User>(userRef)
+
 const { data: posts } = useCollection<Post>(q, { ssrKey: useId() })
-
-
-
-
 
 </script>

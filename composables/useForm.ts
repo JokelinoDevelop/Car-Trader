@@ -87,9 +87,11 @@ export const useForm = () => {
     engine: '',
     fuelType: '',
     transmission: '',
-    numberOfDoors: null,
-    year: null,
-    price: null
+    numberOfDoors: 0,
+    year: 0,
+    price: 0,
+    photos: [],
+    coverImageIndex: -1
   })
 
   const createAdErrors = ref<CreateAdErrors | null>(null)
@@ -113,7 +115,20 @@ export const useForm = () => {
     phoneNumber: ''
   })
 
-  const editProfileErrors = ref<EditProfileErrors | null>(null)
+  const emptyEditProfileErrors = {
+    _errors: [],
+    firstName: {
+      _errors: []
+    },
+    lastName: {
+      _errors: []
+    },
+    phoneNumber: {
+      _errors: []
+    }
+  }
+
+  const editProfileErrors = ref<EditProfileErrors>(emptyEditProfileErrors)
 
   const onEditProfile = () => {
     const valid = editProfileFormSchema.safeParse(editProfileForm)
@@ -123,7 +138,7 @@ export const useForm = () => {
       console.error(errorConsole)
       return false
     } else {
-      editProfileErrors.value = null
+      editProfileErrors.value = emptyEditProfileErrors
       return true
     }
   }

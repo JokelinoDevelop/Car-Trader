@@ -31,6 +31,14 @@
             </div>
           </fieldset>
         </form>
+
+        <div>
+          <hr class="border-2 border-pink rounded-xl">
+          <DialogTitle class="mt-2 text-xl font-semibold">
+            Change profile picture
+          </DialogTitle>
+          <ChangeProfilePicture :uid="user?.uid" :userRef="userRef"/>
+        </div>
         <DialogClose
           class="text-grass11 hover:bg-green4 focus:shadow-green7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
           aria-label="Close">
@@ -42,7 +50,8 @@
 </template>
 
 <script setup lang="ts">
-import { doc, updateDoc } from 'firebase/firestore'
+import type { User } from '~/types'
+import { doc, updateDoc, collection } from 'firebase/firestore'
 import { updateProfile } from 'firebase/auth'
 import {
   DialogClose,
@@ -62,11 +71,13 @@ const open = ref(false)
 
 const user = useCurrentUser()
 
-const name = ref(user.value?.displayName ?? '')
-
 const uploading = ref(false)
 
 const db = useFirestore()
+
+const userRef = doc(collection(db, 'users'), user.value?.uid)
+
+const { data: userDoc } = useDocument<User>(userRef)
 
 const onEditProfileSubmit = async () => {
   uploading.value = true
@@ -79,13 +90,35 @@ const onEditProfileSubmit = async () => {
       throw new Error('Failed to update user profile')
     }
 
+    if (userDoc.value?.firstName == editProfileForm.firstName) {
+      editProfileErrors.value?.firstName?._errors.splice(0, 1, 'Cannot be the same as your current name')
+      notification.reject('Failed to update your profile, input name cannot be the same as your current name')
+      return
+    } else {
+      editProfileErrors.value?.firstName?._errors.splice(0, 1)
+    }
+
+    if (userDoc.value?.lastName == editProfileForm.lastName) {
+      editProfileErrors.value?.lastName?._errors.splice(0, 1, 'Cannot be the same as your current last name')
+      notification.reject('Failed to update your profile, input last name cannot be the same as your current last name')
+      return
+    } else {
+      editProfileErrors.value?.lastName?._errors.splice(0, 1)
+    }
+
+    if (userDoc.value?.phoneNumber == editProfileForm.phoneNumber) {
+      editProfileErrors.value?.phoneNumber?._errors.splice(0, 1, 'Cannot be the same as your current phone number')
+      notification.reject('Failed to update your profile, input phone number cannot be the same as your current phone number')
+      return
+    } else {
+      editProfileErrors.value?.phoneNumber?._errors.splice(0, 1)
+    }
+
     await updateProfile(user.value!, {
-      displayName: name.value,
+      displayName: editProfileForm.firstName + ' ' + editProfileForm.lastName,
     })
 
-    const usersRef = doc(db, 'users', user.value.uid)
-
-    await updateDoc(usersRef, {
+    await updateDoc(userRef, {
       firstName: editProfileForm.firstName,
       lastName: editProfileForm.lastName,
       phoneNumber: editProfileForm.phoneNumber,

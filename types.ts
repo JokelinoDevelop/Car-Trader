@@ -14,6 +14,7 @@ export type User = {
   phoneNumber: string
   email: string
   marketingAccept: boolean
+  photoURL: string
   createdAt: Date
   updatedAt: Date
 }
