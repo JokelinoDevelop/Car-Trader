@@ -12,12 +12,13 @@
       </NuxtLink>
 
 
-      <div class="flex items-center gap-2 md:gap-6 text-md md:text-lg">
-        <NuxtLink to="/vehicles" class="hover-pink">
-          Vehicles
-        </NuxtLink>
-        <span class="hover-pink">Sellers</span>
-        <!-- <Icon name="mdi:account-outline" size="32" color="#DDCAD9" class="cursor-pointer" /> -->
+      <div class="flex items-center gap-4 text-md md:text-lg">
+        <div class="hidden md:flex md:gap-4">
+          <NuxtLink to="/vehicles" class="hover-pink">Vehicles</NuxtLink>
+          <NuxtLink to="/sellers" class="hover-pink">Sellers</NuxtLink>
+        </div>
+
+        <MobileNavMenu />
         <DropDownMenu />
       </div>
     </div>

@@ -1,9 +1,9 @@
 <template>
   <DropdownMenuRoot v-model:open="toggleState" class="group">
     <DropdownMenuTrigger
-      class="rounded-full w-[45px] h-[45px] inline-flex items-center justify-center hover:text-black hover:bg-lightGreen bg-pink shadow-[0_2px_10px] shadow-slate-500 outline-none transition-colors duration-300"
+      class="rounded-full w-[40px] h-[40px] lg:w-[45px] lg:h-[45px] inline-flex items-center justify-center hover:text-black hover:bg-lightGreen bg-pink shadow-[0_2px_10px] shadow-slate-500 outline-none transition-colors duration-300"
       :class="{ 'bg-white text-black': toggleState }" aria-label="Customise options">
-      <Icon name="mdi:account-outline" size="32" class="cursor-pointer" />
+      <Icon name="mdi:account-outline" size="28" class="cursor-pointer" />
     </DropdownMenuTrigger>
 
     <DropdownMenuPortal>
@@ -15,7 +15,7 @@
             class="bg-transparent hover:bg-lightGreen hover:text-black leading-none rounded-[3px] flex items-center h-[25px] px-[5px] relative pl-[25px] select-none outline-none transition-all duration-300">
             Sign Up
             <div class="ml-auto pl-[20px]">
-              <Icon name="mdi:tag-edit-outline" size="24" />
+              <Icon name="mdi:tag-edit-outline" sizes="24" />
             </div>
           </DropdownMenuItem>
         </NuxtLink>

@@ -43,13 +43,16 @@
       </div>
 
       <div class="mt-8 text-center">
-        <NuxtButton>Get Started Today!</NuxtButton>
+        <NuxtButton :to="user ? '/profile' : '/sign-up'">Get Started Today!</NuxtButton>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-
+import type { User } from 'firebase/auth/cordova';
+defineProps<{
+  user: User
+}>()
 
 </script>

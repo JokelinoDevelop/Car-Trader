@@ -21,7 +21,7 @@
               Tap into our user-friendly interface to sell your car in no time.
             </p>
 
-            <NuxtButton>List Your Car</NuxtButton>
+            <NuxtButton :to="user ? '/profile' : '/sign-up'">List Your Car</NuxtButton>
           </div>
         </div>
       </div>
@@ -30,5 +30,8 @@
 </template>
 
 <script setup lang="ts">
-
+import type { User } from 'firebase/auth/cordova';
+defineProps<{
+  user: User
+}>()
 </script>

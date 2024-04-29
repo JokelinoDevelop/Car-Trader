@@ -3,12 +3,12 @@
     <div class="flex items-center justify-between">
       <div class="space-x-2 ">
         <button
-          class="hover:bg-white hover:text-brown bg-pink text-white inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
+          class="hover:bg-white hover:text-brown bg-pink text-white inline-flex h-[35px] items-center justify-center rounded-[4px] px-1.5 sm:px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
           type="button" @click="openFileDialog()">
           Choose file
         </button>
         <button
-          class="hover:bg-black hover:text-white bg-white text-pink inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
+          class="hover:bg-black hover:text-white bg-white text-pink inline-flex h-[35px] items-center justify-center rounded-[4px] px-1.5 sm:px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
           type="button" :disabled="!files" @click="reset()">
           Reset
         </button>
@@ -16,7 +16,7 @@
 
 
       <button
-        class="hover:bg-white hover:text-brown bg-slate-700 text-white inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
+        class="hover:bg-white hover:text-brown bg-slate-700 text-white inline-flex h-[35px] items-center justify-center rounded-[4px] px-1.5 sm:px-[15px] font-semibold leading-none focus:shadow-[0_0_0_2px] focus:outline-none transition-all duration-200"
         type="button" @click="onSubmit">
         Confirm
       </button>
