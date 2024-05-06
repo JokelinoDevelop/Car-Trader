@@ -1,10 +1,13 @@
 import type { CreateAdFormSchema } from '~/utils/schemas'
 
-export type Post = CreateAdFormSchema & {
+type CreateAdFormSchemaPost = Omit<CreateAdFormSchema, 'coverImageIndex'>
+
+export type Post = CreateAdFormSchemaPost & {
   id?: string
   createdAt?: string
   updatedAt?: string
   userId?: string
+  coverImage?: string
 }
 
 export type User = {

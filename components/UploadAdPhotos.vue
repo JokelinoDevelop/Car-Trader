@@ -23,7 +23,7 @@
           <div class="relative">
             <NuxtImg @click="setCoverImage(index)" v-if="img" :src="img"
               class="relative border-2 border-pink w-[7rem] h-[7rem] mt-3 cursor-pointer"
-              :class="{ 'border-blue-300 border-4': coverImageIndex === index }" />
+              :class="{ 'border-blue-500 border-4': coverImageIndex === index }" />
             <Icon name="material-symbols:delete-rounded"
               class="text-pink bg-lightGreen hover:text-slate-800 transition-colors duration-200 border-2 rounded-full  absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 cursor-pointer"
               size="32" @click="removeImage(index)" />
@@ -42,7 +42,11 @@
 import { useFileDialog } from '@vueuse/core'
 
 const createAdFormPhotos = defineModel<any[]>('createAdFormPhotos')
-const coverImageIndex = defineModel<any>('coverImageIndex')
+const coverImageIndex = defineModel<number>('coverImageIndex')
+
+onMounted(() => {
+  coverImageIndex.value = 0
+})
 
 const showProgressInfo = ref(false)
 

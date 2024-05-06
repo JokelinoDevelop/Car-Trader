@@ -136,7 +136,7 @@ const onCreateAdFormSubmit = async () => {
 
       for (const photo of photos) {
         const postPhotoRef = storageRef(storage, 'posts/photos/' + user.value?.displayName + '?' + user.value?.uid + '/' + adForm.postTitle + '?' + postRef.id + '/' + photo.name)
-        const { url, uploadError, upload } = useStorageFile(postPhotoRef)
+        const { url, upload } = useStorageFile(postPhotoRef)
         await upload(photo)
         while (!url.value) {
           await new Promise(resolve => setTimeout(resolve, 100)) //

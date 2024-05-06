@@ -91,7 +91,7 @@ export const useForm = () => {
     year: 0,
     price: 0,
     photos: [],
-    coverImageIndex: -1
+    coverImageIndex: 0
   })
 
   const createAdErrors = ref<CreateAdErrors | null>(null)

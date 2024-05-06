@@ -1,7 +1,7 @@
 <template>
-  <NuxtLink to="/post-info"
+  <NuxtLink :to="`/vehicles/${post.id}`"
     class="block rounded-lg  bg-brown hover:bg-brown/80 border-2 border-lightPink text-white transition-all duration-300">
-    <NuxtImg alt="Car image" src="/images/car.jpg"
+    <NuxtImg alt="Car image" :src="post.coverImage ?? '/images/car.jpg'"
       class="h-[20rem] w-full rounded-md object-cover border-2 border-lightPink" />
 
     <div class="mt-4 p-3 ">

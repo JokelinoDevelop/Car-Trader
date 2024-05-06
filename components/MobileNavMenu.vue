@@ -8,7 +8,7 @@
 
     <DropdownMenuPortal>
       <DropdownMenuContent
-        class=" min-w-[220px] outline-none bg-pink text-lightGreen text-md flex flex-col gap-2 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+        class=" min-w-[220px] z-[15] outline-none bg-pink text-lightGreen text-md flex flex-col gap-2 rounded-md p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
         :side-offset="5">
         <NuxtLink to="/vehicles">
           <DropdownMenuItem value="Vehicles"
