@@ -24,17 +24,14 @@
     </div>
 
     <div class="grid gap-6 mt-6 pb-6 md:grid-cols-2 xl:grid-cols-3 lg:gap-8 lg:mt-6 lg:pb-12">
-      <template v-if="posts">
-        <template v-if="filteredPosts.length > 0" v-for="post in filteredPosts" :key="post.id">
+
+      <template v-if="filteredPosts.length > 0" v-for="post in filteredPosts" :key="post.id">
           <Post :post="post" />
-        </template>
-        <template v-else>
-          <div class="text-white text-xl">No posts found</div>
-        </template>
       </template>
       <template v-else>
-        <div>Loading...</div>
+        <div class="text-white text-xl">No posts found</div>
       </template>
+
     </div>
   </div>
 </template>
@@ -65,22 +62,13 @@ const resetFilter = () => {
   search.numberOfDoors = 0
   search.transmission = ''
   search.fuelType = ''
-  getIntialPosts()
 }
 
 const db = useFirestore()
 
-const posts = ref<Post[]>([])
 
-const getIntialPosts = async () => {
-  const q = query(collection(db, 'posts'))
-  const querySnapshot = await getDocs(q)
-  posts.value = querySnapshot.docs.map(doc => doc.data() as Post)
-}
+const { data: posts } = useCollection<Post>(collection(db, 'posts'), { ssrKey: useId() })
 
-onBeforeMount(() => {
-  getIntialPosts()
-})
 
 const searchPosts = async () => {
   const q = buildQuery()

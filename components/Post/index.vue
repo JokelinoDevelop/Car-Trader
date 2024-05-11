@@ -49,4 +49,5 @@ import type { Post } from '~/types'
 defineProps<{
   post: Post
 }>()
+
 </script>
