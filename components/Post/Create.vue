@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { FuelType, Transmission, NumberOfDoors } from '~/utils/createAdOptions'
+import { FuelType, Transmission, NumberOfDoors, years } from '~/utils/createAdOptions'
 import {
   DialogClose,
   DialogContent,
@@ -82,13 +82,6 @@ import { ref as storageRef } from 'firebase/storage'
 const fuelTypes = Object.values(FuelType)
 const transmissions = Object.values(Transmission)
 const numberOfDoors = Object.values(NumberOfDoors)
-
-const startYear = 1990
-const currentYear = new Date().getFullYear()
-const years = Array.from(
-  { length: currentYear - startYear + 1 },
-  (_, index) => startYear + index
-)
 
 const open = ref(false)
 

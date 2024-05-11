@@ -2,9 +2,9 @@
   <div class="min-h-screen max-w-[80%] mx-auto">
     <div class="flex justify-center md:justify-start lg:justify-between items-center mt-8 mb-8 text-white">
       <div class="flex items-center gap-3 lg:gap-8">
-        <NuxtImg :src="userDoc?.photoURL ?? '/images/profile - image.webp'"
-          class="w-[3rem] h-[3rem] lg:w-[4rem] lg:h-[4rem] rounded-xl border-2 border-brown" format="webp"
-          alt="profile image" />
+        <Avatar :photoURL="userDoc?.photoURL" class="w-[3rem] h-[3rem] lg:w-[4rem] lg:h-[4rem] border-2 border-brown">
+          {{ userDoc?.firstName[0]! + userDoc?.lastName[0]! }}
+        </Avatar>
         <p class="text-xl lg:text-xl">
           {{ userDoc?.firstName + ' ' + userDoc?.lastName }}
         </p>

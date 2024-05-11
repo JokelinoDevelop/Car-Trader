@@ -1,6 +1,6 @@
 <template>
   <div
-    class="lg:mt-10 w-full mx-auto lg:w-[60%] relative lg:flex lg:flex-col lg:justify-center lg:items-center h-[30rem] overflow-hidden z-10 lg:h-[28rem]">
+    class="lg:mt-10 w-full mx-auto lg:w-[60%] relative lg:flex lg:flex-col lg:justify-center lg:items-center h-[30rem] overflow-hidden z-10 lg:h-[28rem] lg:hover:scale-[1.05] transition-all duration-300">
     <NuxtImg @click.prevent="screenSize > 1024 ? galleryPop = true : galleryPop = false" :src="currentImage!"
       class="w-full h-full object-cover lg:rounded-lg lg:cursor-pointer" />
 
@@ -31,9 +31,6 @@ const { photos } = defineProps<{
 }>()
 
 const galleryPop = useGalleryPop()
-
-console.log(galleryPop.value)
-
 
 const currentImage = ref<string | null>(photos ? photos[0] : null)
 
