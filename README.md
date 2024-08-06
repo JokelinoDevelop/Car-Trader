@@ -1,75 +1,15 @@
-# Nuxt 3 Minimal Starter
+The website is still being in progress of development, that's why I still haven't hosted it.
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Basically it's a website where users can post ad's about cars. They have option to edit, delete as well. A lot of things in the website are customizable ( user profile, ads etc. ). Users can create their own account and start posting ads or if they dont have an account they can still look and search through the ads.
+The website has very simple and intuitive design and interface.
 
-## Setup
+I'm using Nuxt3 paired with Firebase as BaaS. 
 
-Make sure to install the dependencies:
+Some of the things implemented in the website: 
 
-```bash
-# npm
-npm install
+- authentication
+- storing images in cloud
+- loading states
+- crud operations
 
-# pnpm
-pnpm install
 
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
