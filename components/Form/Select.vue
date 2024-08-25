@@ -5,6 +5,7 @@
       <select :id="label" v-model.trim="modelValue" :type="type ?? 'text'"
         class="peer bg-white w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
         :placeholder="placeholder">
+        <option label=" "></option>
         <template v-for="option in options" :key="option">
           <option :value="option">{{ option }}</option>
         </template>
@@ -35,6 +36,5 @@ const { errors, dark } = defineProps<{
 }>()
 
 const modelValue = defineModel<any>()
-
 
 </script>

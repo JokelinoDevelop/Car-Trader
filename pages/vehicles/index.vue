@@ -26,10 +26,10 @@
     <div class="grid gap-6 mt-6 pb-6 md:grid-cols-2 xl:grid-cols-3 lg:gap-8 lg:mt-6 lg:pb-12">
 
       <template v-if="filteredPosts.length > 0" v-for="post in filteredPosts" :key="post.id">
-          <Post :post="post" />
+        <Post :post="post" />
       </template>
       <template v-else>
-        <div class="text-white text-xl">No posts found</div>
+        <div class="text-white text-xl">Loading...</div>
       </template>
 
     </div>
@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import type { Post } from '~/types'
 import { collection, query, where, getDocs } from 'firebase/firestore'
-import { ref } from 'vue'
+import type { VueFirestoreQueryData } from 'vuefire'
 import { years } from '~/utils/createAdOptions'
 
 const fuelTypes = Object.values(FuelType)
@@ -62,6 +62,7 @@ const resetFilter = () => {
   search.numberOfDoors = 0
   search.transmission = ''
   search.fuelType = ''
+  searchPosts()
 }
 
 const db = useFirestore()
@@ -69,13 +70,11 @@ const db = useFirestore()
 
 const { data: posts } = useCollection<Post>(collection(db, 'posts'), { ssrKey: useId() })
 
-
 const searchPosts = async () => {
   const q = buildQuery()
   const querySnapshot = await getDocs(q)
-  posts.value = querySnapshot.docs.map(doc => doc.data() as Post)
+  posts.value = querySnapshot.docs.map(doc => doc.data() as VueFirestoreQueryData<Post>) as []
 }
-
 const buildQuery = () => {
   let q = query(collection(db, 'posts'))
 

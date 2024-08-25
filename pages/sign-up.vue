@@ -90,7 +90,6 @@
             </fieldset>
           </form>
 
-          <!-- <hr class="mt-6 border-2 border-brown rounded-2xl"> -->
           <Divider class="mt-6" />
 
           <div class="w-full flex justify-center mt-6">
